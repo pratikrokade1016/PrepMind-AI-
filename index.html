@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrepMind AI</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════ SIDEBAR ═══════════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <!-- Logo -->
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="lg1" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#a78bfa"/>
+                <stop offset="1" stop-color="#6366f1"/>
+              </linearGradient>
+            </defs>
+            <circle cx="18" cy="18" r="17" fill="url(#lg1)" opacity="0.15"/>
+            <path d="M10 26 L18 10 L26 26" stroke="url(#lg1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M13 21 h10" stroke="url(#lg1)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="18" cy="10" r="2" fill="#a78bfa"/>
+          </svg>
+        </div>
+        <span class="logo-text">PrepMind <span class="logo-ai">AI</span></span>
+      </div>
+
+      <!-- New Chat Button -->
+      <button class="new-chat-btn" id="newChatBtn">
+        <i class="fa-solid fa-plus"></i>
+        <span>New Chat</span>
+      </button>
+
+      <!-- Search -->
+      <div class="sidebar-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search chats..." id="chatSearch" />
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <span class="nav-label">Menu</span>
+        <a class="nav-item active" data-section="chat" href="#">
+          <i class="fa-solid fa-comment-dots"></i><span>Explore</span>
+        </a>
+        <a class="nav-item" data-section="pyq" href="#">
+          <i class="fa-solid fa-file-circle-question"></i><span>PYQ Practice</span>
+        </a>
+        <a class="nav-item" data-section="quiz" href="#">
+          <i class="fa-solid fa-bolt"></i><span>Quiz Generator</span>
+        </a>
+        <a class="nav-item" data-section="notes" href="#">
+          <i class="fa-solid fa-bookmark"></i><span>My Notes</span>
+          <span class="badge" id="notesBadge">0</span>
+        </a>
+        <a class="nav-item" data-section="history" href="#">
+          <i class="fa-solid fa-clock-rotate-left"></i><span>History</span>
+        </a>
+      </nav>
+
+      <!-- Recent Chats -->
+      <div class="recent-chats">
+        <span class="nav-label">Recent</span>
+        <div class="chat-history-list" id="chatHistoryList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- User Profile -->
+    <div class="sidebar-user">
+      <div class="user-avatar">U</div>
+      <div class="user-info">
+        <span class="user-name">User</span>
+        <span class="user-plan">Free Plan</span>
+      </div>
+      <button class="user-settings-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+    </div>
+  </aside>
+
+  <!-- Sidebar toggle for mobile -->
+  <button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- ═══════════════════════════════ MAIN ═══════════════════════════════ -->
+  <main class="main-content" id="mainContent">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="section-title" id="sectionTitle">Explore</span>
+      </div>
+      <div class="topbar-right">
+
+
+<button class="topbar-btn" id="loginBtn">
+  <i class="fa-solid fa-user"></i> Login
+</button>
+
+<button class="topbar-btn" id="logoutBtn" style="display:none;">
+  <i class="fa-solid fa-right-from-bracket"></i> Logout
+</button>
+
+        <button class="topbar-btn" id="exportBtn">
+          <i class="fa-solid fa-arrow-up-from-bracket"></i> Export Chat
+        </button>
+        <button class="topbar-btn upgrade-btn">
+          <i class="fa-solid fa-crown"></i> Upgrade
+        </button>
+      </div>
+    </header>
+
+    <!-- ─── CHAT SECTION ─── -->
+    <section class="section active" id="section-chat">
+
+      <!-- Hero (shown when no messages) -->
+      <div class="hero" id="hero">
+        <!-- Animated orb -->
+        <div class="orb-container">
+          <div class="orb">
+            <div class="orb-inner"></div>
+            <div class="orb-ring r1"></div>
+            <div class="orb-ring r2"></div>
+            <div class="orb-ring r3"></div>
+          </div>
+        </div>
+
+        <h1 class="hero-heading">Hello, User <span class="wave">👋</span></h1>
+        <p class="hero-sub">How can I assist you today?</p>
+
+        <!-- Feature Buttons -->
+        <div class="feature-btns">
+          <button class="feature-btn" data-prompt="Do deeper research on system design concepts">
+            <i class="fa-solid fa-microscope"></i> Deeper Research
+          </button>
+          <button class="feature-btn" data-prompt="Help me solve a DSA problem step by step">
+            <i class="fa-solid fa-code"></i> Solve DSA
+          </button>
+          <button class="feature-btn" data-prompt="Generate a quiz on data structures for me">
+            <i class="fa-solid fa-list-check"></i> Quiz Generator
+          </button>
+          <button class="feature-btn" data-prompt="Analyze my resume and give feedback">
+            <i class="fa-solid fa-file-lines"></i> Resume Analyzer
+          </button>
+          <button class="feature-btn" data-prompt="Start a mock interview session for software engineering">
+            <i class="fa-solid fa-user-tie"></i> Mock Interview
+          </button>
+        </div>
+
+        <!-- Quick Action Cards -->
+        <div class="quick-cards">
+          <div class="quick-card" data-prompt="Help me synthesize my notes on algorithms">
+            <div class="qc-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="qc-body">
+              <span class="qc-title">Synthesize Notes</span>
+              <span class="qc-sub">Organize & summarize your study notes</span>
+            </div>
+            <i class="fa-solid fa-arrow-right qc-arrow"></i>
+          </div>
+          <div class="quick-card" data-prompt="Give me a coding practice problem on trees">
+            <div class="qc-icon"><i class="fa-solid fa-terminal"></i></div>
+            <div class="qc-body">
+              <span class="qc-title">Practice Coding</span>
+              <span class="qc-sub">Daily DSA challenges & solutions</span>
+            </div>
+            <i class="fa-solid fa-arrow-right qc-arrow"></i>
+          </div>
+          <div class="quick-card" data-prompt="Prepare me for a Google software engineer interview">
+            <div class="qc-icon"><i class="fa-solid fa-briefcase"></i></div>
+            <div class="qc-body">
+              <span class="qc-title">Interview Prep</span>
+              <span class="qc-sub">Mock Q&A with expert feedback</span>
+            </div>
+            <i class="fa-solid fa-arrow-right qc-arrow"></i>
+          </div>
+          <div class="quick-card" data-prompt="Show me PYQ questions from top tech companies">
+            <div class="qc-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="qc-body">
+              <span class="qc-title">PYQ Practice</span>
+              <span class="qc-sub">Company-wise previous year questions</span>
+            </div>
+            <i class="fa-solid fa-arrow-right qc-arrow"></i>
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="recommendations">
+          <h3 class="rec-heading"><i class="fa-solid fa-star"></i> Recommended for You</h3>
+          <div class="rec-cards">
+            <div class="rec-card warn">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>Weak in Arrays</span>
+              <button class="rec-action" data-prompt="I need to practice array problems. Give me exercises from easy to hard.">Practice Now</button>
+            </div>
+            <div class="rec-card info">
+              <i class="fa-solid fa-code-branch"></i>
+              <span>Dynamic Programming</span>
+              <button class="rec-action" data-prompt="Teach me dynamic programming with examples and practice problems.">Start Learning</button>
+            </div>
+            <div class="rec-card success">
+              <i class="fa-solid fa-microphone-lines"></i>
+              <span>Take Mock Interview</span>
+              <button class="rec-action" data-prompt="Conduct a mock technical interview for a software engineer role.">Begin</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Messages -->
+      <div class="chat-messages" id="chatMessages">
+        <!-- Messages injected here -->
+      </div>
+
+      <!-- Follow-up Suggestions (shown after AI reply) -->
+      <div class="suggestions" id="suggestions" style="display:none;">
+        <button class="suggestion-chip" data-prompt="Explain more about this topic">💡 Explain more</button>
+        <button class="suggestion-chip" data-prompt="Give me a real-world example">🔍 Give example</button>
+        <button class="suggestion-chip" data-prompt="Optimize this solution">⚡ Optimize solution</button>
+        <button class="suggestion-chip" data-prompt="Generate a similar question for practice">🎯 Similar question</button>
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area">
+        <div class="input-wrapper">
+          <label class="input-attach" for="imageUpload" title="Upload image">
+            <i class="fa-solid fa-image"></i>
+            <input type="file" id="imageUpload" accept="image/*" hidden />
+          </label>
+          <textarea
+            class="chat-input"
+            id="chatInput"
+            placeholder="Ask coding, DSA, upload question image, or generate quiz..."
+            rows="1"
+          ></textarea>
+          <div class="input-actions">
+            <button class="input-btn mic-btn" id="micBtn" title="Voice input">
+              <i class="fa-solid fa-microphone"></i>
+            </button>
+            <button class="input-btn send-btn" id="sendBtn" title="Send">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+        <p class="input-hint">PrepMind AI can make mistakes. Verify important information.</p>
+      </div>
+    </section>
+
+    <!-- ─── PYQ SECTION ─── -->
+    <section class="section" id="section-pyq">
+      <div class="section-inner">
+        <div class="section-header">
+          <h2><i class="fa-solid fa-file-circle-question"></i> PYQ Practice</h2>
+          <p>Previous Year Questions from top tech companies</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="pyq-filters">
+          <select class="filter-select" id="filterCompany">
+            <option value="">All Companies</option>
+            <option>Google</option>
+            <option>Amazon</option>
+            <option>Microsoft</option>
+            <option>Meta</option>
+            <option>Netflix</option>
+            <option>Apple</option>
+          </select>
+          <select class="filter-select" id="filterDifficulty">
+            <option value="">All Difficulties</option>
+            <option>Easy</option>
+            <option>Medium</option>
+            <option>Hard</option>
+          </select>
+          <select class="filter-select" id="filterTopic">
+            <option value="">All Topics</option>
+            <option>Arrays</option>
+            <option>Trees</option>
+            <option>DP</option>
+            <option>Graphs</option>
+            <option>Strings</option>
+            <option>Recursion</option>
+          </select>
+          <button class="filter-apply-btn" id="applyFilters">Apply Filters</button>
+        </div>
+
+        <!-- Question Cards -->
+        <div class="pyq-grid" id="pyqGrid">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── QUIZ SECTION ─── -->
+    <section class="section" id="section-quiz">
+      <div class="section-inner">
+        <div class="section-header">
+          <h2><i class="fa-solid fa-bolt"></i> Quiz Generator</h2>
+          <p>Generate personalized quizzes based on topic and difficulty</p>
+        </div>
+        <div class="quiz-config">
+          <div class="quiz-config-row">
+            <label>Topic</label>
+            <input type="text" class="quiz-input" id="quizTopic" placeholder="e.g., Binary Trees, DP, OS Concepts..." />
+          </div>
+          <div class="quiz-config-row">
+            <label>Difficulty</label>
+            <div class="quiz-difficulty">
+              <button class="diff-btn active" data-diff="Easy">Easy</button>
+              <button class="diff-btn" data-diff="Medium">Medium</button>
+              <button class="diff-btn" data-diff="Hard">Hard</button>
+            </div>
+          </div>
+          <div class="quiz-config-row">
+            <label>Number of Questions</label>
+            <div class="quiz-count">
+              <button class="count-btn" data-count="5">5</button>
+              <button class="count-btn active" data-count="10">10</button>
+              <button class="count-btn" data-count="20">20</button>
+            </div>
+          </div>
+          <button class="generate-quiz-btn" id="generateQuizBtn">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Quiz
+          </button>
+        </div>
+        <div class="quiz-result" id="quizResult" style="display:none;">
+          <!-- Quiz questions injected -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── NOTES SECTION ─── -->
+    <section class="section" id="section-notes">
+      <div class="section-inner">
+        <div class="section-header">
+          <h2><i class="fa-solid fa-bookmark"></i> My Notes</h2>
+          <p>Bookmarked AI responses saved for your reference</p>
+        </div>
+        <div class="notes-grid" id="notesGrid">
+          <!-- Populated from localStorage -->
+        </div>
+        <div class="notes-empty" id="notesEmpty" style="display:none;">
+          <i class="fa-solid fa-bookmark"></i>
+          <p>No notes saved yet.<br/>Bookmark AI responses using the <i class="fa-solid fa-bookmark"></i> icon in chat.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── HISTORY SECTION ─── -->
+    <section class="section" id="section-history">
+      <div class="section-inner">
+        <div class="section-header">
+          <h2><i class="fa-solid fa-clock-rotate-left"></i> Chat History</h2>
+          <p>Your previous conversations with PrepMind AI</p>
+        </div>
+        <div class="history-list" id="historyList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════ IMAGE PREVIEW OVERLAY ═══════════════════ -->
+  <div class="img-preview-overlay" id="imgPreviewOverlay" style="display:none;">
+    <div class="img-preview-box">
+      <img id="imgPreviewEl" src="" alt="Preview" />
+      <div class="img-preview-actions">
+        <button id="imgSendBtn" class="send-btn"><i class="fa-solid fa-paper-plane"></i> Send with Image</button>
+        <button id="imgCancelBtn" class="topbar-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ TOAST ═══════════════════ -->
+  <div class="toast" id="toast"></div>
+ <!-- ═══════════════════ AUTH MODAL ═══════════════════ -->
+ <div id="authModal" style="
+ display:none;
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,0.6);
+ z-index:9999;
+ justify-content:center;
+ align-items:center;
+ ">
+ <div style="
+   background:#111;
+   padding:30px;
+   border-radius:12px;
+   width:320px;
+   box-shadow:0 0 20px rgba(0,0,0,0.5);
+ ">
+   <h2 style="margin-bottom:15px;">Login / Signup</h2>
+ 
+   <input id="authEmail" placeholder="Email"
+     style="width:100%;margin-bottom:10px;padding:10px;border-radius:8px;border:none;" />
+ 
+   <input id="authPassword" type="password" placeholder="Password"
+     style="width:100%;margin-bottom:15px;padding:10px;border-radius:8px;border:none;" />
+ 
+   <button id="authLoginBtn" style="width:100%;margin-bottom:10px;padding:10px;">
+     Login
+   </button>
+ 
+   <button id="authSignupBtn" style="width:100%;margin-bottom:10px;padding:10px;">
+     Signup
+   </button>
+ 
+   <button id="authCloseBtn" style="width:100%;padding:8px;">
+     Cancel
+   </button>
+ </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    
+      const authModal = document.getElementById("authModal");
+      const loginBtn = document.getElementById("loginBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+    
+      const emailInput = document.getElementById("authEmail");
+      const passwordInput = document.getElementById("authPassword");
+    
+      const authLoginBtn = document.getElementById("authLoginBtn");
+      const authSignupBtn = document.getElementById("authSignupBtn");
+      const authCloseBtn = document.getElementById("authCloseBtn");
+    
+      if (!authModal) return; // safety
+    
+      loginBtn.onclick = () => authModal.style.display = "flex";
+    
+      authCloseBtn.onclick = () => {
+        authModal.style.display = "none";
+      };
+    
+      authLoginBtn.onclick = async () => {
+        await login(emailInput.value, passwordInput.value);
+    
+        if (localStorage.getItem("token")) {
+          authModal.style.display = "none";
+          loginBtn.style.display = "none";
+          logoutBtn.style.display = "inline-block";
+        }
+      };
+    
+      authSignupBtn.onclick = async () => {
+        await signup(emailInput.value, passwordInput.value);
+      };
+    
+      logoutBtn.onclick = () => {
+        localStorage.removeItem("token");
+        location.reload();
+      };
+    
+      if (localStorage.getItem("token")) {
+        loginBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+      }
+    
+    });
+    </script>
+
+  <script src="script.js"></script>
+  
+
+ 
+</div>
+</body>
+</html>
