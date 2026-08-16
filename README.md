@@ -1,2 +1,2 @@
-# PrepMind-AI-
-RAG-based AI learning assistant for MPSC/UPSC preparation, providing syllabus-aligned, context-aware answers with OCR, FAISS, FastAPI, and Google Gemini API.
+# PrepMind-AI
+A RAG-based intelligent learning assistant for MPSC/UPSC preparation that provides syllabus-aligned, context-aware answers using OCR, FAISS, FastAPI, and Google Gemini API.
